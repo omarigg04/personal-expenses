@@ -12,6 +12,8 @@
 
 https://github.com/rajeshdavidbabu/remix-supabase-social/assets/15684795/1fcdaff5-0715-4cfe-9820-d5dfeed270a7
 
+## Supabase Visual Schema:
+![image](https://github.com/user-attachments/assets/f0d012a9-1823-454b-84af-e5805c72a12d)
 
 
 ## Motivation
