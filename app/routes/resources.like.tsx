@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useToast } from "~/components/ui/use-toast";
 import { getSupabaseWithSessionHeaders } from "~/lib/supabase.server";
 import { useFetcher } from "@remix-run/react";
-import { Star } from "lucide-react";
+import { Heart } from "lucide-react";
 // import { loader } from "../_home+/gitposts.$postId";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -109,15 +109,15 @@ export function Like({ likedByUser, likes, postId, sessionUserId }: LikeProps) {
         disabled={isLoading}
       >
         {optimisticLikedByUser ? (
-          <Star
+          <Heart
             className={`w-4 h-4 fill-current ${
               isLoading
                 ? "text-gray-500"
-                : "text-blue-700 group-hover:text-blue-400"
+                : "text-red-700 group-hover:text-red-400"
             }`}
           />
         ) : (
-          <Star
+          <Heart
             className={`w-4 h-4 fill-current ${
               isLoading
                 ? "text-gray-500"

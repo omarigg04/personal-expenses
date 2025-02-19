@@ -1,5 +1,6 @@
 import { Link } from "@remix-run/react";
-import { Star } from "lucide-react";
+// import { Star } from "lucide-react";
+import { Heart } from "lucide-react";
 
 type ViewLikesProps = {
   likes: number;
@@ -22,10 +23,10 @@ export function ViewLikes({
         className="flex justify-center items-center group"
       >
         {likedByUser ? (
-          <Star className={`w-4 h-4 text-blue-700 group-hover:text-blue-400`} />
+          <Heart className={`w-4 h-4 text-red-700 group-hover:text-red-400`} />
         ) : (
-          <Star
-            className={`w-4 h-4 text-muted-foreground group-hover:text-blue-400`}
+          <Heart
+            className={`w-4 h-4 text-muted-foreground group-hover:text-red-400`}
           />
         )}
         <span

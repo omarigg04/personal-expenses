@@ -1,57 +1,52 @@
-import { UpdateIcon } from "@radix-ui/react-icons";
-import { useFetcher } from "@remix-run/react";
-import { useState, useRef, useEffect } from "react";
-import { Button } from "./ui/button";
+import { useEffect, useRef, useState } from "react";
 import {
   Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
 } from "./ui/card";
 import { Textarea } from "./ui/textarea";
+import { Button } from "./ui/button";
+import { useFetcher } from "@remix-run/react";
+import { UpdateIcon } from "@radix-ui/react-icons";
 
 type WritePostProps = {
   sessionUserId: string;
   postId?: string;
-  isComment?: boolean;
 };
 
-export function WritePost({
-  sessionUserId,
-  isComment,
-  postId,
-}: WritePostProps) {
-  const fetcher = useFetcher();
+export function WritePost({ sessionUserId, postId }: WritePostProps) {
   const [title, setTitle] = useState("");
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fetcher = useFetcher();
   const isPosting = fetcher.state !== "idle";
   const isDisabled = isPosting || !title;
+  const isComment = Boolean(postId);
 
   const postActionUrl = isComment ? "/resources/comment" : "/resources/post";
 
-  const formData = {
-    title,
-    userId: sessionUserId,
-    ...(isComment ? { postId } : {}),
-  };
+  const postTitle = () => {
+    const formData = {
+      title,
+      userId: sessionUserId,
+      ...(isComment ? { postId } : {}),
+    };
 
-  const postItem = async () => {
     fetcher.submit(formData, { method: "POST", action: postActionUrl });
     setTitle("");
   };
 
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-
   useEffect(() => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = "inherit"; // Reset height - important to shrink on delete
+      textareaRef.current.style.height = "inherit";
       const computed = window.getComputedStyle(textareaRef.current);
       const height =
         textareaRef.current.scrollHeight +
         parseInt(computed.getPropertyValue("border-top-width")) +
         parseInt(computed.getPropertyValue("border-bottom-width"));
-      textareaRef.current.style.height = `${height}px`;
+      textareaRef.current.style.height = height + "px";
     }
   }, [title]);
 
@@ -60,13 +55,13 @@ export function WritePost({
       <Card className="mb-4">
         <CardContent className="p-4 text-right">
           <Textarea
-            placeholder="Type your comment here (markdown supported)!!"
-            value={title}
             ref={textareaRef}
+            placeholder="Type your comment here !!!"
+            value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="mb-2"
           />
-          <Button disabled={isDisabled} onClick={postItem}>
+          <Button onClick={postTitle} disabled={isDisabled}>
             {isPosting && <UpdateIcon className="mr-2 h-4 w-4 animate-spin" />}
             {isPosting ? "Commenting" : "Comment"}
           </Button>
@@ -79,19 +74,19 @@ export function WritePost({
     <Card>
       <CardHeader>
         <CardTitle>Write Post</CardTitle>
-        <CardDescription>You can write in Markdown</CardDescription>
+        <CardDescription>You can write your post in Md</CardDescription>
       </CardHeader>
       <CardContent>
         <Textarea
-          placeholder="Type your gitpost here!!"
-          value={title}
           ref={textareaRef}
+          placeholder="Type your gitpost here !!!"
+          value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="mb-2"
         />
       </CardContent>
       <CardFooter>
-        <Button disabled={isDisabled} onClick={postItem}>
+        <Button onClick={postTitle} disabled={isDisabled}>
           {isPosting && <UpdateIcon className="mr-2 h-4 w-4 animate-spin" />}
           {isPosting ? "Posting" : "Post"}
         </Button>
