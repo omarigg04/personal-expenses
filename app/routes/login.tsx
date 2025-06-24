@@ -35,7 +35,7 @@ export default function Login() {
       </nav>
 
       <div className="flex items-center justify-center flex-1 w-full">
-        <div className="h-full flex-col bg-muted rounded-md m-8 p-4 w-1/2 hidden md:flex max-w-sm">
+        {/* <div className="h-full flex-col bg-muted rounded-md m-8 p-4 w-1/2 hidden md:flex max-w-sm">
           <div className="flex flex-col items-center space-y-4 text-center p-4">
             <h1 className="text-3xl md:text-5xl font-bold tracking-tighter">
               <span className="px-1 font-extrabold bg-gradient-to-r from-orange-700 via-blue-500 to-green-400 text-transparent bg-clip-text bg-300% animate-gradient">
@@ -48,18 +48,18 @@ export default function Login() {
               Our posts and comments are powered by Markdown
             </p>
           </div>
-        </div>
+        </div> */}
         <div className="m-8 w-full md:w-1/2 p-4 grid gap-4 max-w-sm">
-          <GithubLogin />
+          {/* <GithubLogin /> */}
           <div className="grid gap-4">
             <div className="relative">
-              <div className="absolute inset-0 flex items-center">
+              {/* <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t" />
-              </div>
+              </div> */}
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
+                {/* <span className="bg-background px-2 text-muted-foreground">
                   Or continue with
-                </span>
+                </span> */}
               </div>
             </div>
             <AuthForm />

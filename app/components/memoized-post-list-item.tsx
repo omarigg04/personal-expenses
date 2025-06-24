@@ -26,32 +26,33 @@ export const MemoizedPostListItem = memo(
     }
 
     return (
-      <Post
-        avatarUrl={post.author.avatar_url}
-        id={post.id}
-        name={post.author.name}
-        username={post.author.username}
-        dateTimeString={formatToTwitterDate(post.created_at)}
-        title={post.title}
-        userId={post.user_id}
-        key={post.id}
-      >
-        <div className="flex items-center justify-between w-24 md:w-32">
-          <div className="flex items-center w-1/2">
-            <ViewLikes
-              likedByUser={post.isLikedByUser}
-              likes={post.likes}
-              pathname={pathnameWithSearchQuery}
-            />
-          </div>
-          <div className="flex items-center w-1/2">
-            <ViewComments
-              number={post.comments.length}
-              pathname={pathnameWithSearchQuery}
-            />
-          </div>
-        </div>
-      </Post>
+      // <Post
+      //   avatarUrl={post.author.avatar_url}
+      //   id={post.id}
+      //   name={post.author.name}
+      //   username={post.author.username}
+      //   dateTimeString={formatToTwitterDate(post.created_at)}
+      //   title={post.title}
+      //   userId={post.user_id}
+      //   key={post.id}
+      // >
+      //   <div className="flex items-center justify-between w-24 md:w-32">
+      //     <div className="flex items-center w-1/2">
+      //       <ViewLikes
+      //         likedByUser={post.isLikedByUser}
+      //         likes={post.likes}
+      //         pathname={pathnameWithSearchQuery}
+      //       />
+      //     </div>
+      //     <div className="flex items-center w-1/2">
+      //       <ViewComments
+      //         number={post.comments.length}
+      //         pathname={pathnameWithSearchQuery}
+      //       />
+      //     </div>
+      //   </div>
+      // </Post>
+      <h1>OK</h1>
     );
   }
 );

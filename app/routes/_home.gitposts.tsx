@@ -73,7 +73,7 @@ export default function GitPosts() {
 
   return (
     <div className="w-full max-w-xl px-4 flex flex-col">
-      <Tabs defaultValue="view-posts" className="my-2">
+      {/* <Tabs defaultValue="view-posts" className="my-2">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="view-posts">View Posts</TabsTrigger>
           <TabsTrigger value="write-post">Write Post</TabsTrigger>
@@ -91,7 +91,7 @@ export default function GitPosts() {
         <TabsContent value="write-post">
           <WritePost sessionUserId={sessionUserId} />
         </TabsContent>
-      </Tabs>
+      </Tabs> */}
     </div>
   );
 }

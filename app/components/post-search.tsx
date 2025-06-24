@@ -36,7 +36,7 @@ export function PostSearch({
       <div className="w-1/12 flex justify-center">
         {isSearching && <Loader2 className="h-4 w-4 animate-spin" />}
       </div>
-      <Form
+      {/* <Form
         role="search"
         ref={formRef}
         id="search-form"
@@ -64,7 +64,7 @@ export function PostSearch({
           onChange={(event) => setQuery(event.currentTarget.value)}
           placeholder="Search posts..."
         />
-      </Form>
+      </Form> */}
     </div>
   );
 }

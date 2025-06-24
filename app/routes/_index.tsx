@@ -36,28 +36,32 @@ export default function Index() {
           <h1 className="text-3xl md:text-5xl font-bold tracking-tighter">
             A{' '}
             <span className="font-extrabold bg-gradient-to-r from-orange-700 via-blue-500 to-green-400 text-transparent bg-clip-text bg-300% animate-gradient">
-              Community-Driven
+              Place
             </span>{' '}
-            Minimalist Social Platform for Coders
+              to{' '} 
+            <span className="font-extrabold bg-gradient-to-r from-orange-700 via-blue-500 to-green-400 text-transparent bg-clip-text bg-300% animate-gradient">
+              Store{' '}
+            </span>
+            your data.
           </h1>
 
-          <p className="text-muted-foreground mt-2">
+          <p className="text-sm text-muted-foreground mt-2">
             Powered by{' '}
             <span className="text-blue-700 font-bold mt-2">Remix</span> and{' '}
             <span className="text-green-700 font-bold mt-2">Supabase</span>
           </p>
 
           <Button asChild>
-            <Link to="/login">Join our Community</Link>
+            <Link to="/login">Join</Link>
           </Button>
         </div>
-        <Card className="relative group overflow-hidden rounded-lg md:w-1/2">
+        {/* <Card className="relative group overflow-hidden rounded-lg md:w-1/2">
           <CardContent className="p-1">
             <video className="h-full w-full rounded-lg" autoPlay loop muted>
               <source src="assets/videos/demo.mp4" type="video/mp4"></source>
             </video>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
     </section>
   );
