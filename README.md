@@ -2,28 +2,8 @@
   <img src="https://github.com/rajeshdavidbabu/remix-supabase-social/assets/15684795/f00ea48b-79a4-4fc5-acd2-07e2da69448e" alt="Gitposter logo"/>
 </p>
 
-# Welcome to Gitposter
+# Welcome to Personal Expenses Tracker
 
-- A social platform app built using Remix and Supabase.
-
-## Demo
-
-
-
-https://github.com/rajeshdavidbabu/remix-supabase-social/assets/15684795/1fcdaff5-0715-4cfe-9820-d5dfeed270a7
-
-## Supabase Visual Schema:
-![image](https://github.com/user-attachments/assets/f0d012a9-1823-454b-84af-e5805c72a12d)
-
-
-## Motivation
-
-x.com is a noisy social-media app and I want to try building an actual social-media platform for coders.
-
-- Vision:
-  - Gather feedback from community regarding features.
-  - Keep it open-source and attract PRs.
-  - If it scales beyond a certain traffic then look for sponsors.
 
 ## How do I build this ?
 
