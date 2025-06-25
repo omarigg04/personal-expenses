@@ -94,6 +94,27 @@ export let action = async ({ request }: LoaderFunctionArgs) => {
   const { supabase, headers, session } = await getSupabaseWithSessionHeaders({ request });
   if (!session) return redirect("/login", { headers });
 
+
+  // Borrar expenses
+  if (request.method === "DELETE") {
+    const url = new URL(request.url);
+    const id = url.searchParams.get("id");
+    console.log("Intentando borrar expense con id:", id, "user:", session.user.id);
+    if (!id) return new Response("Missing id", { status: 400 });
+
+    // Solo permite borrar si el expense es del usuario logueado
+    const { error } = await supabase
+      .from("expenses")
+      .delete()
+      .eq("id", id)
+      .eq("user_id", session.user.id);
+
+    if (error) return new Response(error.message, { status: 500 });
+    return new Response("Deleted", { status: 200 });
+  }
+
+
+  // Añadir expenses
   const formData = await request.formData();
   const expense_name = formData.get("expense_name") as string;
   const expense = Number(formData.get("expense"));

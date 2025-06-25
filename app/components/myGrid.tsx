@@ -40,16 +40,67 @@ const columnDefs: ColDef<Expense>[] = [
       return params.value ? new Date(params.value).toLocaleDateString() : '';
     }
   },
+    {
+    headerName: '',
+    // field: 'actions',
+    cellRenderer: (params: { context: any; data: Expense }) => (
+      <button
+        onClick={() => params.context.onDelete(params.data.id)}
+        style={{
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer',
+          fontSize: '1.2rem',
+          color: 'red',
+        }}
+        title="Eliminar"
+      >
+        ❌
+      </button>
+    ),
+    width: 60,
+    // pinned: 'right',
+    // suppressMenu: true,
+    sortable: false,
+    filter: false,
+  },
+  
 ];
+
+
+
 
 const MyGrid: React.FC<MyGridProps> = ({ rowData }) => {
   console.log("rowData en MyGrid", rowData);
+
+
+  //funcion para eliminar
+    const handleDelete = async (id: string) => {
+      if (!window.confirm("¿Seguro que deseas eliminar este gasto?")) return;
+      const res = await fetch(`/gitposts?id=${id}`, { method: "DELETE" });
+      if (res.ok) {
+        // Opcional: recarga la página o actualiza el estado local
+        window.location.reload();
+      } else {
+        alert("Error al eliminar el gasto");
+      }
+  };
+
+
+    // Ajusta el ancho de las columnas al ancho del grid
+  const onGridReady = (params: any) => {
+    params.api.sizeColumnsToFit();
+  };
+
+
   return (
     <div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
       <AgGridReact<Expense>
         rowData={rowData ?? []}
         columnDefs={columnDefs}
         defaultColDef={{ sortable: true, filter: true }}
+        context={{ onDelete: handleDelete }}
+        onGridReady={onGridReady}
       />
     </div>
   );
