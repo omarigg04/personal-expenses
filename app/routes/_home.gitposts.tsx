@@ -6,10 +6,12 @@ import { WritePost } from "~/components/write-post";
 import { getSupabaseWithSessionHeaders } from "~/lib/supabase.server";
 import { Separator } from "~/components/ui/separator";
 import { PostSearch } from "~/components/post-search";
-import { getAllPostsWithDetails } from "~/lib/database.server";
+import { getAllExpenses } from "~/lib/database.server";
 import { combinePostsWithLikes, getUserDataFromSession } from "~/lib/utils";
 import { InfiniteVirtualList } from "~/routes/stateful/infinite-virtual-list";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import MyGrid from '../components/myGrid';
+import type { Expense } from "../../models/expense.model.ts"
 
 export let loader = async ({ request }: LoaderFunctionArgs) => {
   const { supabase, headers, session } = await getSupabaseWithSessionHeaders({
@@ -25,11 +27,36 @@ export let loader = async ({ request }: LoaderFunctionArgs) => {
   const query = searchParams.get("query");
   const page = Number(searchParams.get("page")) || 1;
 
-  const { data, totalPages, limit } = await getAllPostsWithDetails({
+
+  // // Posts
+  // const { data, totalPages, limit } = await getAllPostsWithDetails({
+  //   dbClient: supabase,
+  //   query,
+  //   page: isNaN(page) ? 1 : page,
+  // });
+
+  // Expenses
+  const { data: expensesData } = await getAllExpenses({
     dbClient: supabase,
     query,
     page: isNaN(page) ? 1 : page,
   });
+  console.log("expensesData en loader", expensesData);
+
+  // 2. Obtén todos los perfiles
+  const { data: profilesData } = await supabase.from("profiles").select("id, username");
+
+    // 3. Crea un mapa de user_id a username
+  const userIdToUsername = new Map();
+  profilesData?.forEach((profile) => {
+    userIdToUsername.set(profile.id, profile.username);
+  });
+
+    // 4. Agrega el username a cada expense
+  const expensesWithUsername: Expense[] = (expensesData ?? []).map((expense) => ({
+    ...expense,
+    username: userIdToUsername.get(expense.user_id) ?? "Desconocido",
+  }));
 
   const {
     userId: sessionUserId,
@@ -37,15 +64,16 @@ export let loader = async ({ request }: LoaderFunctionArgs) => {
     username,
   } = getUserDataFromSession(session);
 
-  const posts = combinePostsWithLikes(data, sessionUserId);
+  // const posts = combinePostsWithLikes(data, sessionUserId);
 
   return json(
     {
-      posts,
+      // posts,
+      expenses: expensesWithUsername,
       userDetails: { sessionUserId, userAvatarUrl, username },
       query,
-      totalPages,
-      limit,
+      // totalPages,
+      // limit,
     },
     { headers }
   );
@@ -53,10 +81,11 @@ export let loader = async ({ request }: LoaderFunctionArgs) => {
 
 export default function GitPosts() {
   const {
-    posts,
+    // posts,
+    expenses,
     userDetails: { sessionUserId },
     query,
-    totalPages,
+    // totalPages,
   } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
 
@@ -72,26 +101,12 @@ export default function GitPosts() {
   console.log("isSearching ", true, query);
 
   return (
-    <div className="w-full max-w-xl px-4 flex flex-col">
-      {/* <Tabs defaultValue="view-posts" className="my-2">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="view-posts">View Posts</TabsTrigger>
-          <TabsTrigger value="write-post">Write Post</TabsTrigger>
-        </TabsList>
-        <TabsContent value="view-posts">
-          <Outlet />
-          <Separator />
-          <PostSearch searchQuery={query} isSearching={isSearching} />
-          <InfiniteVirtualList
-            sessionUserId={sessionUserId}
-            posts={posts}
-            totalPages={totalPages}
-          />
-        </TabsContent>
-        <TabsContent value="write-post">
-          <WritePost sessionUserId={sessionUserId} />
-        </TabsContent>
-      </Tabs> */}
+    <div className="w-full px-4 flex flex-col">
+      <h1 className="text-xl font-bold mb-4">Mi tabla con AG Grid</h1>
+        <div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
+        
+        <MyGrid rowData={expenses}/>
+      </div>
     </div>
   );
 }

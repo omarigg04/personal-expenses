@@ -3,13 +3,11 @@ import { type LoaderFunctionArgs } from "@remix-run/node";
 import type { ShouldRevalidateFunctionArgs } from "@remix-run/react";
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
 
-import { InfiniteVirtualList } from "~/routes/stateful/infinite-virtual-list";
-
 import { Avatar, AvatarImage } from "~/components/ui/avatar";
 import { Separator } from "~/components/ui/separator";
-import { getPostsForUser, getProfileForUsername } from "~/lib/database.server";
+import { getAllExpenses, getProfileForUsername } from "~/lib/database.server";
 import { getSupabaseWithSessionHeaders } from "~/lib/supabase.server";
-import { combinePostsWithLikes } from "~/lib/utils";
+import MyGrid from "~/components/myGrid";
 
 export let loader = async ({ request, params }: LoaderFunctionArgs) => {
   const { username } = params;
@@ -21,7 +19,6 @@ export let loader = async ({ request, params }: LoaderFunctionArgs) => {
     return redirect("/login", { headers });
   }
 
-  // Redirect to 404 page if username is invalid
   if (!username) {
     return redirect("/404", { headers });
   }
@@ -37,29 +34,28 @@ export let loader = async ({ request, params }: LoaderFunctionArgs) => {
 
   const profile = profiles ? profiles[0] : null;
 
-  // User not found
   if (!profile) {
     return redirect("/404", { headers });
   }
 
-  const {
-    data: rawPosts,
-    limit,
-    totalPages,
-  } = await getPostsForUser({
+  // Obtener los gastos de este usuario
+  const { data: expenses, limit, totalPages } = await getAllExpenses({
     dbClient: supabase,
-    userId: profile.id,
+    query: null,
     page,
+    limit: 10,
   });
 
-  const sessionUserId = session.user.id;
-  const posts = combinePostsWithLikes(rawPosts, sessionUserId);
+  // Filtrar los gastos por el usuario actual
+  const userExpenses = expenses
+    ? expenses.filter((e: any) => e.username === profile.username)
+    : [];
 
   return json(
     {
       profile,
       sessionUserId: session.user.id,
-      posts,
+      expenses: userExpenses,
       limit,
       totalPages,
     },
@@ -70,8 +66,7 @@ export let loader = async ({ request, params }: LoaderFunctionArgs) => {
 export default function Profile() {
   const {
     profile: { avatar_url, name, username },
-    sessionUserId,
-    posts,
+    expenses,
     totalPages,
   } = useLoaderData<typeof loader>();
 
@@ -90,14 +85,9 @@ export default function Profile() {
       <br />
       <Separator />
       <br />
-      <h2 className="text-xl font-heading font-semibold">{"User posts"}</h2>
+      <h2 className="text-xl font-heading font-semibold">{"User expenses"}</h2>
       <br />
-      <InfiniteVirtualList
-        sessionUserId={sessionUserId}
-        posts={posts}
-        totalPages={totalPages}
-        isProfile={true}
-      />
+      <MyGrid rowData={expenses} />
     </div>
   );
 }
