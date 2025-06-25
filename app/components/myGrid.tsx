@@ -25,12 +25,21 @@ type MyGridProps = {
 };
 
 const columnDefs: ColDef<Expense>[] = [
-  { field: 'id', headerName: 'ID' },
-  { field: 'created_at', headerName: 'Fecha' },
-  { field: 'user_id', headerName: 'Usuario' },
+  // { field: 'id', headerName: 'ID' },
+  // { field: 'user_id', headerName: 'Usuario' },
+  { field: 'expense', headerName: 'Gasto', 
+    valueFormatter: params => params.value != null ? `$${params.value}` : '',
+  },
   { field: 'username', headerName: 'Nombre' },
-  { field: 'expense', headerName: 'Gasto' },
   { field: 'expense_name', headerName: 'Nombre del gasto' },
+    {
+    field: 'created_at',
+    headerName: 'Fecha',
+    valueFormatter: params => {
+      // Ejemplo: solo fecha YYYY-MM-DD
+      return params.value ? new Date(params.value).toLocaleDateString() : '';
+    }
+  },
 ];
 
 const MyGrid: React.FC<MyGridProps> = ({ rowData }) => {

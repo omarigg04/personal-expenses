@@ -36,12 +36,20 @@ export let loader = async ({ request }: LoaderFunctionArgs) => {
   //   page: isNaN(page) ? 1 : page,
   // });
 
+    const user_id = session.user.id; // <-- ID del usuario logueado
+
   // Expenses
-  const { data: expensesData } = await getAllExpenses({
-    dbClient: supabase,
-    query,
-    page: isNaN(page) ? 1 : page,
-  });
+  // const { data: expensesData } = await getAllExpenses({
+  //   dbClient: supabase,
+  //   query,
+  //   page: isNaN(page) ? 1 : page,
+  // });
+    // Solo trae los expenses de este usuario
+  const { data: expensesData } = await supabase
+    .from("expenses")
+    .select("*")
+    .eq("user_id", user_id)
+    .order("created_at", { ascending: false });
   console.log("expensesData en loader", expensesData);
 
   // 2. Obtén todos los perfiles
