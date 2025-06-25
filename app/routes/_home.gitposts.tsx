@@ -12,6 +12,7 @@ import { InfiniteVirtualList } from "~/routes/stateful/infinite-virtual-list";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import MyGrid from '../components/myGrid';
 import type { Expense } from "../../models/expense.model.ts"
+import { ExpenseForm } from "../components/myForm";
 
 export let loader = async ({ request }: LoaderFunctionArgs) => {
   const { supabase, headers, session } = await getSupabaseWithSessionHeaders({
@@ -79,6 +80,33 @@ export let loader = async ({ request }: LoaderFunctionArgs) => {
   );
 };
 
+export type ExpenseActionData = { error?: string };
+
+export let action = async ({ request }: LoaderFunctionArgs) => {
+  const { supabase, headers, session } = await getSupabaseWithSessionHeaders({ request });
+  if (!session) return redirect("/login", { headers });
+
+  const formData = await request.formData();
+  const expense_name = formData.get("expense_name") as string;
+  const expense = Number(formData.get("expense"));
+  const user_id = session.user.id;
+
+  const { error } = await supabase.from("expenses").insert([
+    {
+      expense_name,
+      expense,
+      user_id,
+      created_at: new Date().toISOString(),
+    },
+  ]);
+
+  if (error) {
+    return json({ error: error.message }, { status: 400 });
+  }
+
+  return redirect("/gitposts");
+};
+
 export default function GitPosts() {
   const {
     // posts,
@@ -104,7 +132,7 @@ export default function GitPosts() {
     <div className="w-full px-4 flex flex-col">
       <h1 className="text-xl font-bold mb-4">Mi tabla con AG Grid</h1>
         <div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
-        
+        <ExpenseForm />
         <MyGrid rowData={expenses}/>
       </div>
     </div>
