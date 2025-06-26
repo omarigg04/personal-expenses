@@ -159,7 +159,7 @@ export default function GitPosts() {
 
   return (
     <div className="w-full px-4 flex flex-col">
-      <h1 className="text-xl font-bold mb-4">Mi tabla con AG Grid</h1>
+      <h1 className="text-xl font-bold mb-4">Expenses</h1>
         <div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
         <ExpenseForm />
         <MyGrid rowData={expenses}/>
